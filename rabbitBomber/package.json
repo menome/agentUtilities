@@ -1,0 +1,21 @@
+{
+  "name": "rabbitbomber",
+  "version": "1.0.0",
+  "description": "publishes messages on rmq",
+  "main": "bomber.js",
+  "scripts": {
+    "start": "node bomber.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/menome/agentUtilities.git"
+  },
+  "author": "mbarley",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.5.5",
+    "decypher": "^0.13.0",
+    "neo4j-driver": "^1.7.6"
+  }
+}

@@ -1,0 +1,18 @@
+{
+    "neo4j":{
+        "url": "bolt://localhost:10002",
+        "user": "neo4j",
+        "pass": "CodaGlenBaronyMonk"
+    },
+    "rabbit":{  
+        "enable": true,
+        "url": "amqp://rabbitmq:CodaGlenBaronyMonk@localhost:10003?heartbeat=3600",
+        "routingKey": "fpp.textract",
+        "exchange": "fpp",
+        "exchangeType": "topic"
+    },
+    "query":{
+        "match":" (f:File)-[]-(p:Page)-[]-(t:Table)",
+        "return":"f.Name as filename,p.Uuid as uuid, p.Library as library, p.Image as image"
+    }
+}
