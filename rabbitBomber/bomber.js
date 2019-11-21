@@ -22,7 +22,7 @@ rmq.connect().then(function(){
     driver.close();
     console.log("pulled " + result.records.length + " records from graph")
     for(var i = 0; i < result.records.length; i++){
-      
+
       /****************
        * Rabbit Message definition below
        * This message needs to conform to the expected message schema
@@ -49,11 +49,9 @@ rmq.connect().then(function(){
     }
     return rmq.disconnect();
   })
-  .catch( function(err){console.log("Neo4j Error: %s",err);process.exit();})
+  .catch( function(err){console.log("Neo4j Error: %s",err)})
 })
-.catch( function(){process.exit();})
-
-
+process.exit();
 // //FPP message format, for working on files in the library
 // var outMessage = {
 //   "Uuid":result.records[i].get("uuid"),
