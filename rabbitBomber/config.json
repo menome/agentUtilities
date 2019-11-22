@@ -6,13 +6,13 @@
     },
     "rabbit":{  
         "enable": true,
-        "url": "amqp://rabbitmq:CodaGlenBaronyMonk@localhost:10003?heartbeat=3600",
-        "routingKey": "fpp.textract",
-        "exchange": "fpp",
+        "url": "amqp://rabbitmq:CodaGlenBaronyMonk@localhost:5672?heartbeat=3600",
+        "routingKey": "syncevents.harvester.updates.thelinkold",
+        "exchange": "syncevents",
         "exchangeType": "topic"
     },
     "query":{
-        "match":" (f:File)-[]-(p:Page)-[]-(t:Table)",
-        "return":"f.Name as filename,p.Uuid as uuid, p.Library as library, p.Image as image"
+        "match":"(a:Article)",
+        "return":"a.Name as name, a.Uuid as uuid, a.SourceSystems as sourceSystem, properties(a) as data limit 2"
     }
 }

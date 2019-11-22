@@ -30,28 +30,49 @@ rmq.connect().then(function(){
        * Copy templates below in here
      *****************/
       
-      //FPP message format, for working on files in library
-      var outMessage = {
-        "Uuid":result.records[i].get("uuid"),
-        "Library":"miniofiles",
-        "Path":result.records[i].get("image")
-      };
-
-
-
-
-
-
+   
+     // Harvester Message, for sending data to a refinery (node and first degree relationships)
+     var outMessage = {
+       "Name": result.records[i].get("name"),
+       "NodeType":'Article',
+       "SourceSystem": result.records[i].get("sourceSystem").toString(),
+       "Priority": 1,
+       "ConformedDimensions": {
+         "Uuid":result.records[i].get("uuid")
+       },
+       "Properties": {},
+      // "Connections":[
+      //   //FOllows the same general format as above, minus connections
+      //   {
+      //     "NodeType": "Person",
+      //     "RelType": "",
+      //     "ForwardRel": true,
+      //     "ConformedDimensions": {
+      //       "Name":itm["Manufact Name"]
+      //     },
+      //     "Properties": {    
+      //     },
+      //     "RelProps": {    
+      //     }
+      //   }
+      // ]
+     } 
+     //console.log(outMessage.Properties)
+     for(x in result.records[i].get("data")) 
+     {
+       outMessage.Properties[x]=JSON.stringify(result.records[i].get("data")[x])
+   
+    }
       console.log(outMessage)
       var sent =  rmq.publishMessage(outMessage)
       if(sent === true)
-        console.log("Sent message " + i + " to rabbit")
+      console.log("Sent message " + i + " to rabbit")
     }
     return rmq.disconnect();
   })
   .catch( function(err){console.log("Neo4j Error: %s",err)})
 })
-process.exit();
+//process.exit();
 // //FPP message format, for working on files in the library
 // var outMessage = {
 //   "Uuid":result.records[i].get("uuid"),
