@@ -34,8 +34,8 @@ rmq.connect().then(function(){
      // Harvester Message, for sending data to a refinery (node and first degree relationships)
      var outMessage = {
        "Name": result.records[i].get("name"),
-       "NodeType":'Article',
-       "SourceSystem": result.records[i].get("sourceSystem").toString(),
+       "NodeType":config.NodeType,
+       "SourceSystem": 'thelink data export',
        "Priority": 1,
        "ConformedDimensions": {
          "Uuid":result.records[i].get("uuid")
@@ -60,10 +60,11 @@ rmq.connect().then(function(){
      //console.log(outMessage.Properties)
      for(x in result.records[i].get("data")) 
      {
-       outMessage.Properties[x]=JSON.stringify(result.records[i].get("data")[x])
+       if(result.records[i].get("data")[x] !== null && result.records[i].get("data")[x] !== '')
+         outMessage.Properties[x]=JSON.stringify(result.records[i].get("data")[x])
    
     }
-      console.log(outMessage)
+     // console.log(outMessage)
       var sent =  rmq.publishMessage(outMessage)
       if(sent === true)
       console.log("Sent message " + i + " to rabbit")

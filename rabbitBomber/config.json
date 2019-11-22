@@ -12,7 +12,9 @@
         "exchangeType": "topic"
     },
     "query":{
-        "match":"(a:Article)",
-        "return":"a.Name as name, a.Uuid as uuid, a.SourceSystems as sourceSystem, properties(a) as data limit 2"
-    }
+        "match":"(a:File)",
+        "return":"a.Name as name, a.Uuid as uuid, a.SourceSystems as sourceSystem, properties(a) as data"
+    },
+    "NodeType":"File"
+
 }
