@@ -61,10 +61,9 @@ rmq.connect().then(function(){
      for(x in result.records[i].get("data")) 
      {
        if(result.records[i].get("data")[x] !== null && result.records[i].get("data")[x] !== '')
-         outMessage.Properties[x]=JSON.stringify(result.records[i].get("data")[x])
-   
+        outMessage.Properties[x]=str(result.records[i].get("data")[x])
     }
-     // console.log(outMessage)
+      console.log(outMessage)
       var sent =  rmq.publishMessage(outMessage)
       if(sent === true)
       console.log("Sent message " + i + " to rabbit")
@@ -73,6 +72,18 @@ rmq.connect().then(function(){
   })
   .catch( function(err){console.log("Neo4j Error: %s",err)})
 })
+
+// cleans off the darn extra quotes added by stringify
+const str = (s) => {
+  let ret = JSON.stringify(s);
+  if (ret.indexOf('"') === 0) {
+    ret = ret.slice(1);
+  }
+  if (ret[ret.length - 1] === '"') {
+    ret = ret.slice(0, -1 + ret.length);
+  }
+  return ret;
+};
 //process.exit();
 // //FPP message format, for working on files in the library
 // var outMessage = {
