@@ -63,7 +63,7 @@ rmq.connect().then(function(){
        if(result.records[i].get("data")[x] !== null && result.records[i].get("data")[x] !== '')
         outMessage.Properties[x]=str(result.records[i].get("data")[x])
     }
-      console.log(outMessage)
+    //  console.log(outMessage)
       var sent =  rmq.publishMessage(outMessage)
       if(sent === true)
       console.log("Sent message " + i + " to rabbit")
