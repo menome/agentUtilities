@@ -29,20 +29,61 @@ rmq.connect().then(function(){
        * This message needs to conform to the expected message schema
        * Ie, FPP mesage, harvesterMessage etc...
        * Copy templates below in here
-      *****************/
-      //FPP message format, for working on files in the library
-      var outMessage = {
-        "Uuid":result.records[i].get("uuid"),
-        "Library":result.records[i].get("library"),
-        "Path":result.records[i].get("image")
-      };
+     *****************/
       console.log(result.records[i])
       itm = result.records[i]
 
+      n1 = itm._fields[0]
+      r  = itm._fields[1]
+      n2 = itm._fields[0]
+      // Harvester Message, for sending data to a refinery (node and first degree relationships)
+      var outMessage = {
+        "NodeType":n1.labels,
+        "SourceSystem": 'thelink data export',
+        "Priority": 1,
+        "ConformedDimensions": {
+          "Uuid":n1.properties.Uuid
+        },
+        "Properties": {},
+        "Connections":[
+          {
+            "NodeType": n2.labels,
+            "RelType": r.type,
+            "ForwardRel": true ? r.start == n1.identity : false,
+            "ConformedDimensions": {
+              "Uuid":n2.properties.Uuid
+            },
+            "Properties": {},
+            "RelProps": {}
+          }
+        ]
+      } 
+
+      //Add n1 properties
+      if(uuidList.indexOf(n1.properties.Uuid) == -1){
+        uuidList.add(n1.properties.Uuid)
+        for(x in n1.properties) {
+          if(n1.properties[x] !== null && n1.properties[x] !== '')
+          outMessage.Properties[x]=str(n1.properties[x])
+        }
+      }
+      //add REL properties
+      for(x in r.properties) {
+        if(r.properties[x] !== null && r.properties[x] !== '')
+        outMessage.Connections[0].RelProps[x]=str(r.properties[x])
+      }
+      //add n2 properties
+      if(uuidList.indexOf(n2.properties.Uuid) == -1){
+        uuidList.add(n2.properties.Uuid)
+        for(x in n2.properties) {
+          if(n2.properties[x] !== null && n2.properties[x] !== '')
+          outMessage.Connections[0].Properties[x]=str(n2.properties[x])
+        }
+      }
       console.log(outMessage)
-      var sent =  rmq.publishMessage(outMessage)
-      if(sent === true)
-      console.log("Sent message " + i + " to rabbit")
+      // var sent =  rmq.publishMessage(outMessage)
+      // if(sent === true)
+      // console.log("Sent message " + i + " to rabbit")
     }
     return rmq.disconnect();
   })
