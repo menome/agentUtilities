@@ -1,6 +1,6 @@
 
 //PUT RABBIT CONFIG IN HERE
-var neo4j = require('neo4j-driver');
+var neo4j = require('neo4j-driver').v1;
 var Query = require('decypher').Query;
 const fs = require('fs');
 var Jimp = require('jimp');
@@ -26,8 +26,11 @@ var session = driver.session();
 //NEO4J QUERY
 var queryBuilder = function() {
   var query = new Query();
-  query.match(" (f:File)")
-  query.return("f.LibraryKey as Library, f.LibraryPath as Path, f.Name as Name")
+  query.match("  (i:Instance)-[:HAS_CHEMISTRY]-(p)-[]-(t:Table) where t.Download=false \
+  with distinct t limit 50\
+  match (s:Site)-[]-(f:File)-[]-(p:Page)-[]-(t) where s.Name='Montrose' \
+  with distinct t set t.Download=true with t") 
+  query.return("t.LibraryKey as Library, t.Image as Path, split(t.Filename,'.')[0] + '-page-' + t.PageNumber + '.png' as Name ")
   return query;
 }
 
