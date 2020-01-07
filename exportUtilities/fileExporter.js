@@ -4,7 +4,6 @@ var neo4j = require('neo4j-driver').v1;
 var Query = require('decypher').Query;
 const fs = require('fs');
 var Jimp = require('jimp');
-const helpers = require('./helpers');
 const fs = require('fs');
 const request = require('request');
 const rp = require('request-promise');
@@ -71,7 +70,6 @@ const URL = require('url').URL;
       if(fs.statSync(filePath).size > 1024000){
         Jimp.read(filePath).then(file => {
           file.quality(60).greyscale().writeAsync(filePath.slice(0,-4)+".jpg")
-          helpers.deleteFile(filePath)
           return resolve(filePath.slice(0,-4)+".jpg")
         })
         .catch(err => {
@@ -83,7 +81,7 @@ const URL = require('url').URL;
     })
   }
     this.download = (key,path,filePath) => {
-    var url =  new URL('/file', config.host);
+    var url =  new URL('/file', librarianConfig.host);
     
     url.searchParams.set("library",key);
     url.searchParams.set("path",path);
@@ -94,8 +92,8 @@ const URL = require('url').URL;
         path: path
       },
       auth: {
-        user: config.username,
-        pass: config.password
+        user: librarianConfig.username,
+        pass: librarianConfig.password
       }
     }
 
