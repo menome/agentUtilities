@@ -1,20 +1,20 @@
 {
     "neo4j":{
-        "url": "bolt://localhost:7474",
+        "url": "bolt://localhost:10002",
         "user": "neo4j",
         "pass": "CodaGlenBaronyMonk"
     },
     "rabbit":{  
         "enable": true,
-        "url": "amqp://rabbitmq:CodaGlenBaronyMonk@localhost:5672?heartbeat=3600",
-        "routingKey": "syncevents.harvester.updates.thelinkold",
-        "exchange": "syncevents",
+        "url": "amqp://rabbitmq:CodaGlenBaronyMonk@localhost:10005?heartbeat=3600",
+        "routingKey": "fpp.textract.table",
+        "exchange": "fpp",
         "exchangeType": "topic"
     },
     "query":{
-        "match":"(p:Page)",
-        "return":"p.Uuid as uuid, p.Image as path, p.ImageLibrary as library"
+        "match":" (i:Instance)-[:HAS_CHEMISTRY]-(p:Page)-[]-(t:Table) with distinct p match (s:Site)-[]-(f:File)-[]-(p) where s.Name='Montrose' ",
+        "return":"p.Uuid as uuid, p.Image as image, p.ImageLibrary as library limit 3"
     },
-    "NodeType":"Article"
+    "NodeType":"Page"
 
 }
