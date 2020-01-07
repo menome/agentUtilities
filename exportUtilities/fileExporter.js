@@ -5,7 +5,10 @@ var Query = require('decypher').Query;
 const fs = require('fs');
 var Jimp = require('jimp');
 const helpers = require('./helpers');
-const Bot = require('@menome/botframework');
+const fs = require('fs');
+const request = require('request');
+const rp = require('request-promise');
+const URL = require('url').URL;
 
   // Librarin Config
   var librarianConfig= {
@@ -45,9 +48,8 @@ const Bot = require('@menome/botframework');
       var data=result.records[i].get("csv")
 
       // get image for table pulled
-      var filePath= bot.config.get("textract").mount + "textract-" + msg.Uuid + ".png"
-      bot.logger.info("Analyzing file: " + msg.Path)
-      return getFile(bot, msg.Library, msg.Path, filePath).then((filePath)=>{
+      var filePath= "textract-" + msg.Uuid + ".png"
+      return getFile(msg.Library, msg.Path, filePath).then((filePath)=>{
         return this.sizeImage(filePath)
 
       })
@@ -57,25 +59,22 @@ const Bot = require('@menome/botframework');
 
   // Get the file from the Librarian. Returns a promise with a path to the file.
   // If the file already exists, don't re-download it.
-  this.getFile = function(bot, libkey, libpath, localpath) {
+  this.getFile = function(libkey, libpath, localpath) {
     if(fs.existsSync(localpath)){
-      bot.logger.info("File Exists " + localpath)
       return Promise.resolve(localpath);
     }else
-      return bot.librarian.download(libkey, libpath, localpath)
+      return download(libkey, libpath, localpath)
   }
 
   this.sizeImage = function(filePath){
     return new Promise((resolve,reject) => {
       if(fs.statSync(filePath).size > 1024000){
-        bot.logger.info("resizing image")
         Jimp.read(filePath).then(file => {
           file.quality(60).greyscale().writeAsync(filePath.slice(0,-4)+".jpg")
           helpers.deleteFile(filePath)
           return resolve(filePath.slice(0,-4)+".jpg")
         })
         .catch(err => {
-          bot.logger.error(err);
           return reject(err);
         });
       }else{
@@ -83,6 +82,38 @@ const Bot = require('@menome/botframework');
       }
     })
   }
+    this.download = (key,path,filePath) => {
+    var url =  new URL('/file', config.host);
+    
+    url.searchParams.set("library",key);
+    url.searchParams.set("path",path);
+    var opts = {
+      url: url.toString(),
+      qs: {
+        library: key,
+        path: path
+      },
+      auth: {
+        user: config.username,
+        pass: config.password
+      }
+    }
+
+    return new Promise((resolve,reject) => {
+      request(opts)
+        .on('error', (err) => {
+          return reject(err);
+        })
+        .pipe(fs.createWriteStream(filePath))
+        .on('error', (err) => {
+          return reject(err);
+        })
+        .on('finish', () => {
+          return resolve(filePath);
+        })
+    });
+  }
+
   this.initialize = function(){
   }
 
