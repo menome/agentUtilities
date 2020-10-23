@@ -1,0 +1,29 @@
+nodejs
+graphExporter@1.0.0 /mnt/e/Development/agentUtilities/graphExporter
+├─┬ amqplib@0.5.5
+│ ├─┬ bitsyntax@0.1.0
+│ │ ├── buffer-more-ints@1.0.0 deduped
+│ │ ├─┬ debug@2.6.9
+│ │ │ └── ms@2.0.0
+│ │ └── safe-buffer@5.1.2 deduped
+│ ├── bluebird@3.7.1
+│ ├── buffer-more-ints@1.0.0
+│ ├─┬ readable-stream@1.1.14
+│ │ ├── core-util-is@1.0.2
+│ │ ├── inherits@2.0.4
+│ │ ├── isarray@0.0.1
+│ │ └── string_decoder@0.10.31
+│ ├── safe-buffer@5.1.2
+│ └─┬ url-parse@1.4.7
+│   ├── querystringify@2.1.1
+│   └── requires-port@1.0.0
+├─┬ decypher@0.13.0
+│ ├── escape-regexp@0.0.1
+│ └─┬ graphology@0.7.1
+│   └── events@1.1.1
+└─┬ neo4j-driver@1.7.6
+  ├─┬ @babel/runtime@7.7.2
+  │ └── regenerator-runtime@0.13.3
+  ├── text-encoding-utf-8@1.0.2
+  └─┬ uri-js@4.2.2
+    └── punycode@2.1.1

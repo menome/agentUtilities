@@ -1,0 +1,21 @@
+{
+  "name": "exportUtilities",
+  "version": "1.0.0",
+  "description": "publishes a graph as messages on rmq",
+  "main": "fileExporter.js",
+  "scripts": {
+    "start": "node fileExporter.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/menome/agentUtilities.git"
+  },
+  "author": "mbarley",
+  "license": "ISC",
+  "dependencies": {
+    "decypher": "^0.13.0",
+    "neo4j-driver": "^1.7.6",
+    "jimp": "^0.16.1"
+  }
+}
